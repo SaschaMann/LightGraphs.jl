@@ -36,5 +36,19 @@ jobs:
           path: ~/.julia/packages
           key: ${{ runner.OS }}-build-${{ hashFiles('**/Project.toml') }}
 
+      - name: Cache compiled packages (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ~/.julia/compiled
+          key: ${{ runner.OS }}-build-compiled-${{ matrix.julia-version }}-${{ hashFiles('**\Project.toml') }}
+
+      - name: Cache compiled packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ~/.julia/compiled
+          key: ${{ runner.OS }}-build-compiled-${{ matrix.julia-version }}-${{ hashFiles('**/Project.toml') }}
+
       - uses: julia-actions/julia-buildpkg@master
       - uses: julia-actions/julia-runtest@master
